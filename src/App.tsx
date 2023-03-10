@@ -1,7 +1,8 @@
-import { createGlobalStyle, ThemeProvider } from "styled-components";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import Router from "./Router";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { theme} from "./theme";
+import { lighttheme, darktheme } from "./theme";
+import { useState } from "react";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -68,14 +69,29 @@ a {
 }
 `;
 
+const DarkBtn = styled.button`
+  display: flex;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+`;
+
 function App() {
+  const [isDark, setDark] = useState(false);
+
+  const onClick = () => {
+    setDark((current) => !current);
+  };
+
   return (
     <>
-      <GlobalStyle />
-
+      <ThemeProvider theme={isDark ? darktheme : lighttheme}>
+        <GlobalStyle />
+        <DarkBtn onClick={onClick}>Darkmode</DarkBtn>
         <Router />
 
-      <ReactQueryDevtools initialIsOpen={true} />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </>
   );
 }

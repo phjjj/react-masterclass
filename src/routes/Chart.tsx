@@ -1,6 +1,7 @@
+import ApexChart from "react-apexcharts";
 import { useQuery } from "react-query";
 import { fetchCoinHistory } from "../api";
-import ApexChart from "react-apexcharts";
+
 import Price from "./Price";
 
 interface IHistorical {
@@ -41,11 +42,11 @@ function Chart({ coinId }: ChartProps) {
               data: chartData,
             },
           ]}
-            options={{
-              theme: {
-                mode:"dark",
-              }
-            }}
+          options={{
+            theme: {
+              mode: "dark",
+            },
+          }}
         />
       )}
     </div>

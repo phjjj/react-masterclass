@@ -18,8 +18,6 @@ const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
 `;
 
-const Homebtn = styled.button``;
-
 const Loader = styled.span`
   text-align: center;
   display: block;
@@ -41,9 +39,11 @@ const Header = styled.header`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  margin-top: 5px;
+  background-color: ${(props) => props.theme.listColor};
   padding: 10px 20px;
   border-radius: 10px;
+  color: ;
 `;
 const OverviewItem = styled.div`
   display: flex;
@@ -58,7 +58,7 @@ const OverviewItem = styled.div`
   }
 `;
 const Description = styled.p`
-  margin: 20px 0px;
+  margin: 20px 0px; ;
 `;
 
 const Tabs = styled.div`
@@ -73,7 +73,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.listColor};
   border-radius: 10px;
   color: ${(props) =>
     props.isActive ? props.theme.accentColor : props.theme.textColor};
@@ -143,6 +143,13 @@ interface PriceData {
   };
 }
 
+const HomeBtn = styled.button`
+  display: flex;
+  position: absolute;
+  top: 50px;
+  left: 20px;
+`;
+
 function Coin() {
   const { coinId } = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
@@ -158,68 +165,74 @@ function Coin() {
   );
   const loading = infoLoading || tickersLoading;
   return (
-    <Container>
-      <Link to={{ pathname: `/` }}>Home</Link>
-      <Helmet>
-        <title>
-          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
-        </title>
-      </Helmet>
-      <Header>
-        <Title>
-          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
-        </Title>
-      </Header>
-      {loading ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <>
-          <Overview>
-            <OverviewItem>
-              <span>Rank:</span>
-              <span>{infoData?.rank}</span>
-            </OverviewItem>
-            <OverviewItem>
-              <span>Symbol:</span>
-              <span>${infoData?.symbol}</span>
-            </OverviewItem>
-            <OverviewItem>
-              <span>Price:</span>
-              <span>${tickersData?.quotes.USD.price.toFixed(3)}</span>
-            </OverviewItem>
-          </Overview>
-          <Description>{infoData?.description}</Description>
-          <Overview>
-            <OverviewItem>
-              <span>Total Suply:</span>
-              <span>{tickersData?.total_supply}</span>
-            </OverviewItem>
-            <OverviewItem>
-              <span>Max Supply:</span>
-              <span>{tickersData?.max_supply}</span>
-            </OverviewItem>
-          </Overview>
+    <>
+      <HomeBtn>
+        <Link to={{ pathname: `/` }}>Home</Link>
+      </HomeBtn>
+      <Container>
+        <Helmet>
+          <title>
+            {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+          </title>
+        </Helmet>
+        <Header>
+          <Title>
+            {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+          </Title>
+        </Header>
+        {loading ? (
+          <Loader>Loading...</Loader>
+        ) : (
+          <>
+            <Overview>
+              <OverviewItem>
+                <span>Rank:</span>
+                <span>{infoData?.rank}</span>
+              </OverviewItem>
+              <OverviewItem>
+                <span>Symbol:</span>
+                <span>${infoData?.symbol}</span>
+              </OverviewItem>
+              <OverviewItem>
+                <span>Price:</span>
+                <span>${tickersData?.quotes.USD.price.toFixed(3)}</span>
+              </OverviewItem>
+            </Overview>
+            <Overview>
+              <Description>{infoData?.description}</Description>
+            </Overview>
+            <Overview>
+              <OverviewItem>
+                <span>Total Suply:</span>
+                <span>{tickersData?.total_supply}</span>
+              </OverviewItem>
+              <OverviewItem>
+                <span>Max Supply:</span>
+                <span>{tickersData?.max_supply}</span>
+              </OverviewItem>
+            </Overview>
 
-          <Tabs>
-            <Tab isActive={chartMatch !== null}>
-              <Link to={`/${coinId}/chart`}>Chart</Link>
-            </Tab>
-            <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>Price</Link>
-            </Tab>
-          </Tabs>
+            <Tabs>
+              <Tab isActive={chartMatch !== null}>
+                <Link to={`/${coinId}/chart`}>Chart</Link>
+              </Tab>
+              <Tab isActive={priceMatch !== null}>
+                <Link to={`/${coinId}/price`}>Price</Link>
+              </Tab>
+            </Tabs>
 
-          <Switch>
-            <Route path={`/:coinId/price`}>
-              <Price coinId={coinId} />
-            </Route>
-            <Route path={`/:coinId/chart`}>
-              <Chart coinId={coinId} />
-            </Route>
-          </Switch>
-        </>
-      )}
-    </Container>
+            <Switch>
+              <Route path={`/:coinId/price`}>
+                <Price coinId={coinId} />
+              </Route>
+              <Route path={`/:coinId/chart`}>
+                <Chart coinId={coinId} />
+              </Route>
+            </Switch>
+          </>
+        )}
+      </Container>
+    </>
   );
 }
 export default Coin;
